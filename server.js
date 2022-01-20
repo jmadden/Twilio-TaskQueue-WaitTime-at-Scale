@@ -1,0 +1,10 @@
+require('dotenv').config();
+var moment = require('moment');
+const Redis = require('ioredis');
+const { mean, median } = require('mathjs');
+const RedisUtils = require('./utils/RedisUtils');
+const DataParsers = require('./utils/DataParsers');
+const express = require('express');
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded());
