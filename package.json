@@ -9,15 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.25.0",
     "dotenv": "^14.2.0",
-    "express": "^4.17.2",
-    "jsonwebtoken": "^8.5.1",
-    "mathjs": "^10.1.0",
-    "ngrok": "^4.3.0",
-    "node-cron": "^3.0.0",
     "redis": "^4.0.2",
-    "twilio": "^3.73.0",
-    "twilio-sync": "^3.0.6"
+    "twilio": "^3.73.0"
   }
 }
