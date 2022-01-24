@@ -8,13 +8,13 @@
     "deploy": "twilio-run deploy"
   },
   "dependencies": {
-    "@twilio/runtime-handler": "1.2.1",
+    "@twilio/runtime-handler": "1.2.2",
     "dotenv": "^14.2.0",
     "redis": "^4.0.2",
     "twilio": "^3.73.0"
   },
   "devDependencies": {
-    "twilio-run": "^3.4.0"
+    "twilio-run": "^3.4.1"
   },
   "engines": {
     "node": "14"
