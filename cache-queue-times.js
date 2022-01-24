@@ -38,6 +38,7 @@ const getWaitTimes = async (sids) => {
         timestamp: today.toISOString(),
       };
     }
+    console.log('Queue Wait Times: ', waitTimeObj);
     const queueTimes = JSON.stringify(waitTimeObj);
     return queueTimes;
   } catch (error) {
