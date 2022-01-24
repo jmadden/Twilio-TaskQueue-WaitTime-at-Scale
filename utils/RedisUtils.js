@@ -1,45 +1,35 @@
-class RedisUtils {
-  constructor(redisClient) {
-    this.redisClient = redisClient;
-  }
+require('dotenv').config();
 
-  async deleteQueue(queueName) {
-    await this.redisClient.del(queueName);
-  }
+const { createClient } = require('redis');
 
-  async pushItem(queueName, data, priority) {
-    await this.redisClient.zadd(queueName, priority, data);
-  }
+const { REDIS_HOST, REDIS_PORT, REDIS_PASSWORD } = process.env;
+const redisUrl = `redis://default:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}`;
 
-  async popItem(queueName) {
-    const poppedItem = await this.redisClient.bzpopmax(queueName, 1);
-    return poppedItem;
-  }
+const setQueueTimes = async (value) => {
+  const client = createClient({
+    url: redisUrl,
+  });
 
-  async removeItem(queueName, data) {
-    return await this.redisClient.zrem(queueName, data);
-  }
+  client.on('error', (err) => console.log('Redis Client Error', err));
 
-  async findItemIndex(queueName, data) {
-    return await this.redisClient.zrevrank(queueName, data);
-  }
+  await client.connect();
 
-  async findItemScore(queueName, data) {
-    return await this.redisClient.zscore(queueName, data);
-  }
+  await client.set('queue-times', value);
+  await client.disconnect();
+};
 
-  async listItemsBetweenScores(queueName, begin, end) {
-    return await this.redisClient.zrangebyscore(queueName, begin, end);
-  }
+const getQueueTimes = async () => {
+  const client = createClient({
+    url: redisUrl,
+  });
 
-  async getQueueItems(queueName) {
-    //return await this.redisClient.zrange(queueName,0,-1,"WITHSCORES")
-    return await this.redisClient.zrangebyscore(
-      queueName,
-      '-inf',
-      '+inf',
-      'WITHSCORES'
-    );
-  }
-}
-module.exports = RedisUtils;
+  client.on('error', (err) => console.log('Redis Client Error', err));
+
+  await client.connect();
+
+  const value = await client.get('queue-times');
+  await client.disconnect();
+  return value;
+};
+
+module.exports = { setQueueTimes, getQueueTimes };

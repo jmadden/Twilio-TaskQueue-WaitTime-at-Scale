@@ -1,6 +1,5 @@
 require('dotenv').config();
-const RedisUtils = require('./utils/RedisUtils');
-
+const { setQueueTimes } = require('./utils/RedisUtils');
 const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WORKSPACE_SID } =
   process.env;
 
@@ -23,29 +22,37 @@ const getQueueSids = async () => {
 };
 
 // Get wait time per queue
-const getWaitTime = async (sids) => {
+const getWaitTimes = async (sids) => {
   try {
-    let waitTimeObj = {};
+    let waitTimeObj = { queues: {} };
     for (let index = 0; index < sids.length; index++) {
       const stats = await client.taskrouter
         .workspaces(TWILIO_WORKSPACE_SID)
         .taskQueues(sids[index])
         .cumulativeStatistics()
         .fetch();
-
-      waitTimeObj[sids[index]] = stats.waitDurationInQueueUntilAccepted.avg;
+      const timeElapsed = Date.now();
+      const today = new Date(timeElapsed);
+      waitTimeObj.queues[sids[index]] = {
+        waittime: stats.waitDurationInQueueUntilAccepted.avg,
+        timestamp: today.toISOString(),
+      };
     }
-    return waitTimeObj;
+    const queueTimes = JSON.stringify(waitTimeObj);
+    return queueTimes;
   } catch (error) {
     console.error('Failed to retrieve TaskQueue wait times.', error);
   }
 };
 
+const saveToRedis = () => {};
+
 const init = async () => {
   const queueSids = await getQueueSids();
-  const waitTime = await getWaitTime(queueSids);
+  const waitTimes = await getWaitTimes(queueSids);
+  setQueueTimes(waitTimes);
   console.log('Queue SIDS: ', queueSids);
-  console.log('Queue Wait Time Obj: ', waitTime);
+  console.log(JSON.parse(waitTimes));
 };
 
 init();

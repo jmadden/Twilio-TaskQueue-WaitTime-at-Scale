@@ -12,7 +12,6 @@
     "axios": "^0.25.0",
     "dotenv": "^14.2.0",
     "express": "^4.17.2",
-    "ioredis": "^4.28.3",
     "jsonwebtoken": "^8.5.1",
     "mathjs": "^10.1.0",
     "ngrok": "^4.3.0",
