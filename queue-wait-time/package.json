@@ -1,0 +1,22 @@
+{
+  "name": "queue-wait-time",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "twilio-run",
+    "deploy": "twilio-run deploy"
+  },
+  "dependencies": {
+    "@twilio/runtime-handler": "1.2.1",
+    "dotenv": "^14.2.0",
+    "redis": "^4.0.2",
+    "twilio": "^3.73.0"
+  },
+  "devDependencies": {
+    "twilio-run": "^3.4.0"
+  },
+  "engines": {
+    "node": "14"
+  }
+}
