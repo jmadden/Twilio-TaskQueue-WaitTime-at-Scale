@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { setQueueTimes } = require('./utils/RedisUtils');
+const { saveToRedis } = require('./utils/RedisUtils');
 const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WORKSPACE_SID } =
   process.env;
 
@@ -45,14 +45,11 @@ const getWaitTimes = async (sids) => {
   }
 };
 
-const saveToRedis = () => {};
-
 const init = async () => {
   const queueSids = await getQueueSids();
   const waitTimes = await getWaitTimes(queueSids);
-  setQueueTimes(waitTimes);
+  saveToRedis(waitTimes);
   console.log('Queue SIDS: ', queueSids);
-  console.log(JSON.parse(waitTimes));
 };
 
 init();

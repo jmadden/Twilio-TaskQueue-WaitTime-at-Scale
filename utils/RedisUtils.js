@@ -5,7 +5,7 @@ const { createClient } = require('redis');
 const { REDIS_HOST, REDIS_PORT, REDIS_PASSWORD } = process.env;
 const redisUrl = `redis://default:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}`;
 
-const setQueueTimes = async (value) => {
+const saveToRedis = async (value) => {
   const client = createClient({
     url: redisUrl,
   });
@@ -32,4 +32,4 @@ const getQueueTimes = async () => {
   return value;
 };
 
-module.exports = { setQueueTimes, getQueueTimes };
+module.exports = { saveToRedis, getQueueTimes };
