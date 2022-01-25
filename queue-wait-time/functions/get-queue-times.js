@@ -15,5 +15,5 @@ exports.handler = async (context, event, callback) => {
   const time = await getQueueWaitTime(event.queueSid);
   console.log('Wait time in seconds: ', time);
 
-  return callback(null, `${time}`);
+  return callback(null, JSON.parse(`{"waittime":"${time}"}`));
 };
