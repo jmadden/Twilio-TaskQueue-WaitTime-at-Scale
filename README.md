@@ -36,6 +36,17 @@ In this example we will use AWS to set up our enviornment; however, this could t
 
 #### Wait Time Retrieval
 
-## Setup
+The Wait Time will be retrieved by a Twilio Studio [Make HTTP Request](https://www.twilio.com/docs/studio/widget-library/http-request) widget. The TaskQueue a call is going to be routed to is determined in the Studio Flow during an incoming call. This data will be used to retrieve the TaskQueue wait time.
 
-This
+This code has been written as a [Twilio Serverless function named get-queue-times.js](https://github.com/jmadden/Twilio-TaskQueue-WaitTime-at-Scale/blob/main/queue-wait-time/functions/get-queue-times.js) for easier local development. It should be able to be easily converted into a Lambda function.
+
+1. When the appropriate TaskQueue is determined during a Studio Flow execution, the name of the TaskQueue is passed into a Function widget.
+2. The Function widget uses a Twilio Function to retrieve a static JSON object stored in Assets. The JSON object is a copy of the TaskRouter Workflow config.
+3. The Function finds the TaskQueue SID in the JSON object and passes it back to the Studio Flow.
+4. The Studio Flow then uses the Make HTTP Request widget to make a GET request of the AWS Lambda function that is responsible for retrieving TaskQueue wait time from Redis.
+
+   - The GET request will have the TaskQueue SID appended to the end of the URL so the proper TaskQueue wait time can be retrieved.
+
+5. The Lambda function retrieves the `queues` key/value from Redis.
+6. The Lambda function then converts the `queues` value string into a JSON object and retrieves the correct wait time based on the provided TaskQueue SID.
+7. The wait time is then added to the [Enqueue Call widget](https://www.twilio.com/docs/studio/widget-library/enqueue-call) in the Hold Music TwiML URL as a parameter to be used in the hold music logic.
