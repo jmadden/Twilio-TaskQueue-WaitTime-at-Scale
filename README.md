@@ -18,6 +18,8 @@ In this example we will use AWS to set up our enviornment; however, this could t
 
 #### TaskRouter Wait Time Storage
 
+The [cache-queue-time.js](https://github.com/jmadden/Twilio-TaskQueue-WaitTime-at-Scale/blob/main/cache-queue-times.js) file holds the code to be used in Lambda to run every two minutes to push all TaskQueue wait times in to a Redis data store.
+
 1. CloudWatch runs a Lambda function every 2 minutes.
 2. The Lambda function uses the Twilio TaskRouter API to retrieve a list of TaskQueues.
 3. The Lambda function then uses the TaskQueue SIDs to query the builds a JSON object of TaskQueues, their respective wait times, and a timestamp that looks like this:
